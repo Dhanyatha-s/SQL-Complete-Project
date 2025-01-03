@@ -28,3 +28,11 @@ from employees e
 inner join 
 salaries s on  e.employee_id = s.employee_id
 ```
+
+## Query 6: List employees whose salary is above the average salary of their department.
+``` 
+select e.name, e.department_id, e.salary from employees e
+join (select  department_id, avg(salary)as Avg_salry from employees
+group by department_id)as dept_avg on e.department_id = dept_avg.department_id
+where e.salary > dept_avg.Avg_salry
+```
