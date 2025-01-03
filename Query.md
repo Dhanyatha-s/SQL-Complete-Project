@@ -16,3 +16,15 @@ select department_id, name, salary as high_salary
         from employees ) ranked
 where rn = 1
 ```
+## Query 4: Count the number of employees in each department.
+```
+select department_id, count(*) as No_employees from employees group by department_id
+```
+## Query 5: Retrieve the total salary expense for the company
+```
+select sum(e.salary) as total_salary_for_employees,
+		sum(s.salary) as gross_salary_from_company 
+from employees e 
+inner join 
+salaries s on  e.employee_id = s.employee_id
+```
