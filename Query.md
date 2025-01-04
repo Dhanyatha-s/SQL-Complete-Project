@@ -36,3 +36,79 @@ join (select  department_id, avg(salary)as Avg_salry from employees
 group by department_id)as dept_avg on e.department_id = dept_avg.department_id
 where e.salary > dept_avg.Avg_salry
 ```
+
+## Query 6: List employees whose salary is above the average salary of their department.
+```
+select e.name, e.department_id, e.salary from employees e
+join ( select department_id, avg(salary) as avg_salary  from employees group by department_id) as dept_avg
+on
+e.department_id = dept_avg.department_id
+where salary > avg_salary 
+```
+
+## Query 7: Find the total number of employees hired each year.
+```
+select year(hire_date)as hired_year,count(*) as no_employees from employees
+group by year(hire_date)
+```
+## Query 8: List departments with more than 2 employees.
+```
+select count(*) as no_employees, department_id from employees
+group by department_id
+having count(*) >= 2
+```
+##Query 9: Retrieve the details of the youngest employee (by hire date).
+```
+select * from employees
+where hire_date = (select max(hire_date) from employees)
+```
+## Query 10: Retrieve the details of the oldest employee (by hire date).
+```
+select * from employees
+where hire_date = (select min(hire_date)from employees)
+```
+## Query 11: Find the second-highest salary in the company.
+```
+select department_id, salary as secd_high_salary 
+from 
+	(select department_id, salary,
+		ROW_NUMBER() over(order by salary desc) as rn from employees) ranked
+where rn = 2
+```
+## Query 12: Find employees whose names start with the letter 'A'
+```
+select name from employees 
+where name like 'A%'
+```
+## Query 13: Retrieve employees earning salaries within a range (e.g., 70,000 to 90,000).
+```
+select * from employees
+where salary between '70000' and '90000'
+```
+## Query 14: Calculate the percentage of total salary expense contributed by each department.
+```
+SELECT department_id, 
+       SUM(salary) AS department_salary, 
+       (SUM(salary) / (SELECT SUM(salary) FROM employees) * 100) AS percentage_contribution
+FROM employees
+GROUP BY department_id;
+```
+## Query 15: Find employees with the same salary in different departments.
+```
+select e1.department_id as dept1, e1.name as empl1, 
+		e2.department_id as dept2, e2.name as empl2, e1.salary 
+from 
+employees e1
+join
+employees e2
+on e1.salary = e2.salary 
+and e1.department_id != e2.department_id
+```
+
+## Query 16: List employees with unique salaries across the entire company.
+```
+select name, salary as unique_salary from employees
+group by salary
+having count(*) = 1
+```
+
