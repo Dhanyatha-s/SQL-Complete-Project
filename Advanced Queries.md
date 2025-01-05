@@ -31,14 +31,14 @@ where rn <= 2
 ```
 
 ## Query 28: Calculate the percentage of total salary expense contributed by each department using a CTE.
-``
+```
 with expense_contribution as(
 select  department_id, sum(salary) as total_dept_salary
 from employees
 group by department_id)
 select  department_id, total_dept_salary, (total_dept_salary * 100 / (select sum(salary) from employees)) as pct_contributon
 from expense_contribution
-``
+```
 ## Query 30: Retrieve the names of employees whose salary is the highest in their respective departments.
 ```
 select name, department_id, salary from employees
