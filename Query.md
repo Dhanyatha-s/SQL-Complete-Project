@@ -112,3 +112,60 @@ group by salary
 having count(*) = 1
 ```
 
+
+## Query 17: Find employees who have been with the company for more than 3 years.
+```
+SELECT name, department_id, hire_date, 
+       DATEDIFF(DAY, hire_date, GETDATE()) / 365.0 AS years_in_company
+FROM employees
+WHERE DATEDIFF(DAY, hire_date, GETDATE()) / 365.0 > 3;
+```
+
+## Query 18: Calculate the average tenure of employees in each department.
+```
+select department_id, avg(DATEDIFF(DAY, hire_date, getdate()) /365) as tenure
+from employees
+group by department_id
+```
+
+## Query 19: Retrieve employees who are earning below the overall average salary.
+```
+SELECT name, department_id, salary
+FROM employees
+WHERE salary < (SELECT AVG(salary) FROM employees);
+```
+
+##Query 20: Identify departments where the total salary expense is above 250,000.
+```
+select department_id, sum(salary) as total_salary from employees
+group by department_id
+having sum(salary) > 250000
+```
+
+##Query 21: Retrieve the name and department of employees who have a salary that is at least 20% higher than their department's average salary.
+```
+select e.name, e.department_id, e.salary, dept_avg.avg_salary
+from employees e
+join
+(select department_id, avg(salary) avg_salary from employees
+group by department_id )  as dept_avg
+on e.department_id = dept_avg.department_id
+where e.salary > dept_avg.avg_salary * 1.2
+```
+
+##Query 22: Find the difference between the highest and lowest salaries in each department.
+```
+select department_id, max(salary) as highest_salary, min(salary) as lowest_salary,
+max(salary) - min(salary) as diffrence from employees
+group by department_id
+```
+
+##Query 23: Generate a report showing each department, the total salary, the average salary, and the number of employees.
+```
+select department_id, 
+	sum(salary) as total_salry,
+	avg(salary) as avg_salary,
+	count(*) as no_employees
+from employees
+group by department_id
+```
